@@ -1,4 +1,4 @@
-// 04_script.js - single source for SPA + Dashboard
+// script.js - single source for SPA + Dashboard
 const STORAGE_KEY = "expenses_v1";
 function readExpenses(){ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
 function writeExpenses(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
@@ -93,19 +93,19 @@ function updateDashboard(){
   const total = arr.reduce((s,x)=>s + Number(x.amount || 0), 0);
   const totalEl = document.getElementById("totalCard");
   const countEl = document.getElementById("countCard");
-  if(totalEl) totalEl.innerText = `รวม: ${total.toLocaleString()} บาท`;
-  if(countEl) countEl.innerText = `รายการ: ${arr.length}`;
+  if(totalEl) totalEl.innerText = `รวมทั้งหมด: ${total.toLocaleString()} บาท`;
+  if(countEl) countEl.innerText = `จำนวนรายการ: ${arr.length}`;
 
   // group by category
   const groups = {};
   arr.forEach(x => groups[x.category] = (groups[x.category] || 0) + Number(x.amount || 0));
 
-  // sort descending by amount -> helps show "most used" first (เหมือนหุ้นเรียงตามมูลค่า)
+  // sort descending by amount
   const entries = Object.entries(groups).sort((a,b) => b[1] - a[1]);
   const labels = entries.map(e => e[0]);
   const values = entries.map(e => e[1]);
 
-  // Bar chart (เรียงจากมาก->น้อย)
+  // Bar chart
   const showBar = document.getElementById("toggleBar")?.checked ?? true;
   const barCtx = document.getElementById("barChart");
   if(barCtx){
@@ -118,7 +118,7 @@ function updateDashboard(){
           datasets: [{
             label: 'จำนวนเงิน (บาท)',
             data: values,
-            backgroundColor: labels.map((_,i)=>`rgba(${40+i*20%200},115,200,0.8)`),
+            backgroundColor: labels.map((_,i)=>`rgba(${(40+i*20)%200},115,200,0.8)`),
             borderRadius: 6
           }]
         },
@@ -135,20 +135,18 @@ function updateDashboard(){
     }
   }
 
-  // Line chart (trend over time — we aggregate by date for the filtered arr)
+  // Line chart
   const showLine = document.getElementById("toggleLine")?.checked ?? true;
   const lineCtx = document.getElementById("lineChart");
   if(lineCtx){
     if(chartLine){ chartLine.destroy(); chartLine = null; }
     if(showLine && arr.length){
-      // aggregate by date sorted chronologically
       const byDate = {};
       arr.sort((a,b)=> a.date.localeCompare(b.date)).forEach(x => {
         byDate[x.date] = (byDate[x.date] || 0) + x.amount;
       });
       const dates = Object.keys(byDate).sort();
       const daily = dates.map(d => byDate[d]);
-      // cumulative to make it look like trend (หุ้น-like)
       const cumulative = daily.reduce((acc, cur, i) => (i===0 ? [cur] : acc.concat(acc[i-1] + cur)), []);
       chartLine = new Chart(lineCtx.getContext("2d"), {
         type: 'line',
@@ -195,17 +193,13 @@ function applyThemeFromStorage(){
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-  // initial page for SPA
   if(document.getElementById("addPage")) goToPage("addPage");
 
-  // bind save
   const saveBtn = document.getElementById("saveBtn");
   if(saveBtn) saveBtn.addEventListener("click", addExpense);
 
-  // bind load table
   loadTable();
 
-  // filter bindings
   const filterBtn = document.getElementById("filterBtn");
   if(filterBtn) filterBtn.addEventListener("click", updateDashboard);
   const filterCategory = document.getElementById("filterCategory");
@@ -213,23 +207,26 @@ document.addEventListener("DOMContentLoaded", function(){
   const minAmount = document.getElementById("minAmount");
   if(minAmount) minAmount.addEventListener("input", updateDashboard);
 
-  // chart toggles
   const toggleBar = document.getElementById("toggleBar");
-  const toggleLine = document.getElementById("toggleLine");
   if(toggleBar) toggleBar.addEventListener("change", updateDashboard);
+  const toggleLine = document.getElementById("toggleLine");
   if(toggleLine) toggleLine.addEventListener("change", updateDashboard);
+  updateDashboard();
 
-  // theme toggle
-  const themeToggle = document.getElementById("themeToggle");
-  applyThemeFromStorage();
+  const themeToggle = document.getElementById("themeToggle"); 
+
   if(themeToggle){
     themeToggle.addEventListener("click", ()=>{
-      document.body.classList.toggle("dark");
-      if(document.body.classList.contains("dark")) { localStorage.setItem("theme","dark"); themeToggle.textContent = "☀️ Light Mode"; }
-      else { localStorage.setItem("theme","light"); themeToggle.textContent = "🌙 Dark Mode"; }
+      if(document.body.classList.contains("dark")){
+        document.body.classList.remove("dark");
+        localStorage.setItem("theme","light");
+        themeToggle.textContent = "🌙 Dark Mode";
+      } else {
+        document.body.classList.add("dark");
+        localStorage.setItem("theme","dark");
+        themeToggle.textContent = "☀️ Light Mode";
+      }
     });
   }
-
-  // initial dashboard render (works both for SPA index or separate dashboard.html)
-  updateDashboard();
+  applyThemeFromStorage();
 });
