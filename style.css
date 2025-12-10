@@ -10,7 +10,7 @@ body {
   -webkit-font-smoothing:antialiased;
 }
 
-/* NAVBAR: centered big buttons */
+/* NAVBAR */
 .navbar {
   display:flex;
   justify-content:space-between;
@@ -45,7 +45,7 @@ h1 { text-align:center; font-size:30px; margin:6px 0 14px; }
   animation:cardPop .35s ease;
 }
 
-/* small filter card (side-by-side) */
+/* filter row */
 .filter-row { display:flex; gap:14px; margin-bottom:14px; flex-wrap:wrap; }
 .filter-card.small { flex:1; min-width:230px; }
 
@@ -97,7 +97,16 @@ tbody td { padding:12px; border-bottom:1px solid #f1f5f9; vertical-align:middle;
   table { min-width:640px; }
 }
 
-/* dark theme */
+/* ---------- Light Mode Variables ---------- */
+:root {
+  --item-bg: #f7fbff;
+  --item-bg-hover: #e9f3ff;
+  --item-border: #cfd9e6;
+  --text: #1d1d1d;
+  --empty-text: #ffffff;
+}
+
+/* ---------- Dark Mode ---------- */
 body.dark {
   background: linear-gradient(180deg,#061017 0%, #071726 100%); color:#dbeafe;
 }
@@ -107,6 +116,13 @@ body.dark .form-card, body.dark .filter-card, body.dark .summary-card, body.dark
 body.dark input, body.dark select { background:#0b1520; color:#dbeafe; border-color:#213041; }
 body.dark thead th { background:#16324b; }
 body.dark .card { background: linear-gradient(135deg,#1f57a1,#123b6f); }
+body.dark {
+  --item-bg: #1e1f23;
+  --item-bg-hover: #2b2d31;
+  --item-border: #3a3c40;
+  --text: #ffffff;
+  --empty-text: #fffbfb;
+}
 
 /* animations */
 @keyframes cardPop { from {transform:translateY(6px); opacity:0} to {transform:none; opacity:1} }
@@ -114,65 +130,26 @@ body.dark .card { background: linear-gradient(135deg,#1f57a1,#123b6f); }
 @keyframes fadeOut { from {opacity:1} to {opacity:0} }
 .fade-in { animation:fadeIn .3s ease forwards; }
 .fade-out { animation:fadeOut .3s ease forwards; }
+
 /* scrollbars */
-::-webkit-scrollbar {
-  width:8px; height:8px;
-}
-::-webkit-scrollbar-track {
-  background:transparent;
-}
-::-webkit-scrollbar-thumb {
-  background:rgba(43,111,179,0.2); border-radius:4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background:rgba(43,111,179,0.4);
-}
-body.dark ::-webkit-scrollbar-thumb {
-  background:rgba(255,255,255,0.2);
-}
-body.dark ::-webkit-scrollbar-thumb:hover {
-  background:rgba(255,255,255,0.4);
-}
-/* กล่องรายการทั้งหมด */
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(43,111,179,0.2); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(43,111,179,0.4); }
+body.dark ::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.2); }
+body.dark ::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.4); }
+
+/* list items */
 .list-item {
-    background: var(--item-bg);
-    color: var(--text);
-    padding: 15px 20px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    border: 1px solid var(--item-border);
-    transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+  background: var(--item-bg);
+  color: var(--text);
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--item-border);
+  transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
 }
-
-/* hover ให้เด่นขึ้น */
 .list-item:hover {
-    background: var(--item-bg-hover);
-    transform: translateY(-2px);
-}
-
-
-/* ---------- Light Mode ---------- */
-:root {
-    --item-bg: #f7fbff;
-    --item-bg-hover: #e9f3ff;
-    --item-border: #cfd9e6;
-    --text: #1d1d1d;
-}
-
-
-/* ---------- Dark Mode ---------- */
-body.dark-mode {
-    --item-bg: #1e1f23;
-    --item-bg-hover: #2b2d31;
-    --item-border: #3a3c40;
-    --text: #ffffff;
-}
-:root {
-    /* สีใน Light Mode */
-    --empty-text: #ffffff;
-}
-
-body.dark-mode {
-    /* สีข้อความใน Dark Mode */
-    --empty-text: #fffbfb;
+  background: var(--item-bg-hover);
+  transform: translateY(-2px);
 }
