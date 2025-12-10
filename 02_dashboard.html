@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Expense Tracker</title>
+    <link rel="stylesheet" href="03_style.css">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-left">
+        <button class="nav-btn" onclick="location.href='index.html'">◀ กลับไป</button>
+    </div>
+    <div class="nav-right">
+        <button id="themeToggle" class="nav-btn">🌙 Dark Mode</button>
+    </div>
+</header>
+
+<main class="container">
+    <h1>📊 Dashboard (แยกหน้า)</h1>
+
+    <div class="filter-card">
+        <h2>กรองข้อมูล</h2>
+        <label>ตั้งแต่</label>
+        <input type="date" id="startDate">
+        <label>ถึง</label>
+        <input type="date" id="endDate">
+        <label>หมวดหมู่</label>
+        <select id="filterCategory">
+            <option value="all">ทั้งหมด</option>
+            <option value="อาหาร">อาหาร</option>
+            <option value="เดินทาง">เดินทาง</option>
+            <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
+            <option value="บันเทิง">บันเทิง</option>
+            <option value="บิลรายเดือน">บิลรายเดือน</option>
+            <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+        <label>ขั้นต่ำจำนวนเงิน (บาท)</label>
+        <input type="number" id="minAmount" min="0" step="1" placeholder="0">
+        <button id="filterBtn" class="secondary-btn">กรอง</button>
+    </div>
+
+    <div class="dashboard-cards">
+        <div class="card" id="totalCard">รวมทั้งหมด: 0 บาท</div>
+        <div class="card" id="countCard">จำนวนรายการ: 0</div>
+    </div>
+
+    <div class="chart-controls">
+        <label><input type="checkbox" id="toggleBar" checked> แสดง Bar (เรียงจากมาก→น้อย)</label>
+        <label><input type="checkbox" id="toggleLine" checked> แสดง Line (แนวหุ้น/เทรนด์)</label>
+    </div>
+
+    <div class="chart-grid">
+        <div class="chart-wrap">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-wrap">
+            <canvas id="lineChart"></canvas>
+        </div>
+    </div>
+
+    <div id="summary" class="summary-card"></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="04_script.js"></script>
+</body>
+</html>

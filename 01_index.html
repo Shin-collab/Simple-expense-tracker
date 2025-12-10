@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Expense Tracker</title>
+    <link rel="stylesheet" href="03_style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="nav-left">
+        <button class="nav-btn" onclick="goToPage('addPage')">➕ เพิ่มรายการ</button>
+        <button class="nav-btn" onclick="goToPage('listPage')">📄 รายการทั้งหมด</button>
+        <button class="nav-btn" onclick="goToPage('dashboardPage')">📊 Dashboard</button>
+    </div>
+    <div class="nav-right">
+        <button id="themeToggle" class="nav-btn">🌙 Dark Mode</button>
+    </div>
+</header>
+
+<main class="container">
+
+    <!-- Add -->
+    <section id="addPage" class="page">
+        <h1>➕ เพิ่มรายรับ–รายจ่าย</h1>
+        <div class="form-card">
+            <label>ประเภท</label>
+            <select id="type">
+                <option value="expense">รายจ่าย</option>
+                <option value="income">รายรับ</option>
+            </select>
+
+            <label>วันที่</label>
+            <input type="date" id="date">
+
+            <label>หมวดหมู่</label>
+            <select id="category">
+                <option>อาหาร</option>
+                <option>เดินทาง</option>
+                <option>ช้อปปิ้ง</option>
+                <option>บันเทิง</option>
+                <option>บิลรายเดือน</option>
+                <option>อื่นๆ</option>
+            </select>
+
+            <label>คำอธิบาย</label>
+            <input type="text" id="description" placeholder="เช่น ซื้อขนม">
+
+            <label>จำนวนเงิน (บาท)</label>
+            <input type="number" id="amount" min="0" step="0.01" placeholder="0.00">
+
+            <button id="saveBtn" class="primary-btn">บันทึก</button>
+        </div>
+    </section>
+
+    <!-- List -->
+    <section id="listPage" class="page" style="display:none">
+        <h1>📄 รายการทั้งหมด</h1>
+        <div class="form-card">
+            <div class="table-wrap">
+                <table id="expenseTable">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หมวดหมู่</th>
+                            <th>คำอธิบาย</th>
+                            <th class="right">จำนวนเงิน</th>
+                            <th>ประเภท</th>
+                            <th>ลบ</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard (SPA) -->
+    <section id="dashboardPage" class="page" style="display:none">
+        <h1>📊 Dashboard</h1>
+
+        <div class="filter-row">
+            <div class="filter-card small">
+                <h2>กรองช่วงวันที่</h2>
+                <label>ตั้งแต่</label>
+                <input type="date" id="startDate">
+                <label>ถึง</label>
+                <input type="date" id="endDate">
+                <button id="filterBtn" class="secondary-btn">กรอง</button>
+            </div>
+
+            <div class="filter-card small">
+                <h2>ตัวกรองเพิ่มเติม</h2>
+                <label>หมวดหมู่</label>
+                <select id="filterCategory">
+                    <option value="all">ทั้งหมด</option>
+                    <option value="อาหาร">อาหาร</option>
+                    <option value="เดินทาง">เดินทาง</option>
+                    <option value="ช้อปปิ้ง">ช้อปปิ้ง</option>
+                    <option value="บันเทิง">บันเทิง</option>
+                    <option value="บิลรายเดือน">บิลรายเดือน</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+
+                <label>ขั้นต่ำจำนวนเงิน (บาท)</label>
+                <input type="number" id="minAmount" min="0" step="1" placeholder="0">
+            </div>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card" id="totalCard">รวมทั้งหมด: 0 บาท</div>
+            <div class="card" id="countCard">จำนวนรายการ: 0</div>
+        </div>
+
+        <div class="chart-controls">
+            <label><input type="checkbox" id="toggleBar" checked> แสดง Bar (เรียงจากมาก→น้อย)</label>
+            <label><input type="checkbox" id="toggleLine" checked> แสดง Line (แนวหุ้น/เทรนด์)</label>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-wrap">
+                <canvas id="barChart"></canvas>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <div id="summary" class="summary-card"></div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="04_script.js"></script>
+</body>
+</html>
